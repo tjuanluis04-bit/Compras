@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Mis Compras</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <h1 class="brand">Mis Compras<span class="brand-dot">.</span></h1>
+    <div class="total-pill">
+      <span class="total-label">Total pendiente</span>
+      <span class="total-value" id="totalPendiente">$0.00</span>
+    </div>
+  </div>
+
+  <div class="account-row">
+    <button type="button" class="account-btn" id="authBtn">
+      <span class="google-g">G</span>
+      <span id="authBtnLabel">Iniciar sesión</span>
+    </button>
+    <span class="sync-status" id="syncStatus" hidden></span>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <nav class="tabs tabs-store" id="storeTabs" hidden></nav>
+</header>
+
+<main id="grid" class="grid"></main>
+
+<div class="empty-state" id="emptyState" hidden>
+  <p class="empty-title">Aún no hay nada aquí</p>
+  <p class="empty-sub">Pulsa el botón + para guardar tu primera compra futura.</p>
+</div>
+
+<button class="fab" id="addBtn" aria-label="Añadir compra">+</button>
+
+<!-- Modal alta/edición -->
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <form class="modal" id="itemForm" novalidate>
+    <div class="modal-head">
+      <h2 id="modalTitle">Nueva compra</h2>
+      <button type="button" class="icon-btn" id="closeModal" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="field">
+      <span>Fotos</span>
+      <div class="photo-strip" id="photoStrip">
+        <button type="button" class="photo-add" id="photoAddBtn">＋</button>
+      </div>
+      <input type="file" accept="image/*" id="imageInput" hidden multiple>
+      <p class="field-hint" id="autoFetchHint" hidden></p>
+    </div>
+
+    <label class="field">
+      <span>Título</span>
+      <input type="text" id="titleInput" placeholder="Ej. Auriculares inalámbricos" required>
+    </label>
+
+    <label class="field">
+      <span>Precio (MXN)</span>
+      <input type="number" id="priceInput" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+    </label>
+
+    <div class="field">
+      <span>Categoría</span>
+      <div class="chip-picker" id="categoryChips"></div>
+    </div>
+    <label class="field" id="newCategoryField" hidden>
+      <span>Nombre de la nueva categoría</span>
+      <input type="text" id="newCategoryInput" placeholder="Ej. Ropa deportiva">
+    </label>
+
+    <div class="field">
+      <span>Tienda</span>
+      <div class="chip-picker" id="storeChips"></div>
+    </div>
+    <label class="field" id="newStoreField" hidden>
+      <span>Nombre de la nueva tienda</span>
+      <input type="text" id="newStoreInput" placeholder="Ej. Zara">
+    </label>
+
+    <label class="field">
+      <span>Enlace</span>
+      <input type="url" id="linkInput" placeholder="https://...">
+    </label>
+    <button type="button" class="btn-secondary" id="autoFetchBtn">Obtener fotos del enlace</button>
+
+    <label class="field">
+      <span>Nota (opcional)</span>
+      <input type="text" id="noteInput" placeholder="Talla, color, para quién...">
+    </label>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" id="deleteItemBtn" hidden>Eliminar</button>
+      <button type="submit" class="btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal de detalle con carrusel -->
+<div class="modal-backdrop" id="detailBackdrop" hidden>
+  <div class="detail-sheet">
+    <button type="button" class="icon-btn detail-close" id="closeDetail" aria-label="Cerrar">✕</button>
+    <div class="carousel" id="carousel">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+
+    <div class="detail-content">
+      <div class="detail-tags">
+        <span class="detail-cat" id="detailCat"></span>
+        <span class="detail-store" id="detailStore"></span>
+      </div>
+      <h2 class="detail-title" id="detailTitle"></h2>
+      <div class="detail-price" id="detailPrice"></div>
+      <p class="detail-note" id="detailNote"></p>
+
+      <div class="detail-actions">
+        <a class="btn-primary detail-link" id="detailLink" target="_blank" rel="noopener">Ver en la tienda ↗</a>
+        <button type="button" class="btn-ghost" id="detailEditBtn">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de inicio de sesión / cuenta -->
+<div class="modal-backdrop" id="accountBackdrop" hidden>
+  <div class="detail-sheet account-sheet">
+    <button type="button" class="icon-btn detail-close" id="closeAccount" aria-label="Cerrar">✕</button>
+    <div class="detail-content">
+      <h2 class="detail-title" id="accountTitle">Sesión</h2>
+      <p class="detail-note" id="accountBody"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="signOutBtn" hidden>Cerrar sesión</button>
+        <button type="button" class="btn-primary" id="migrateBtn" hidden>Subir mis compras locales</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.bundle.js"></script>
+</body>
+</html>

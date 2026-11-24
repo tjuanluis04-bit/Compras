@@ -1,0 +1,20 @@
+{
+  "name": "compras-app",
+  "version": "1.0.0",
+  "description": "App para guardar futuras compras por categoría, con inicio de sesión y sincronización en la nube",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --format=iife --outfile=www/app.bundle.js --define:global=window",
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor-firebase/authentication": "^6.3.0",
+    "firebase": "^10.13.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/assets": "^3.0.5",
+    "esbuild": "^0.23.1"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "appId": "com.miscompras.app",
+  "appName": "Mis Compras",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}
